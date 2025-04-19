@@ -4,7 +4,9 @@ from .forms import ClientForm, FournisseurForm, CategorieForm, ProduitForm
 from django.db.models import Sum, Q
 from .models import MouvementStock
 from .forms import MouvementStockForm
-
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.shortcuts import render, redirect
 
 # ----------------- MOUVEMENTS DE STOCK -----------------
 def ajouter_mouvement(request):
@@ -206,3 +208,26 @@ def dashboard_mouvements(request):
         'produits_plus_sortis': produits_plus_sortis,
     })
 
+
+
+def register_view(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('dashboard')
+    else:
+        form = UserCreationForm()
+    return render(request, 'stock/register.html', {'form': form})
+
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('dashboard')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'stock/login.html', {'form': form})
