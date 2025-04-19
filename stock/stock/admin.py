@@ -17,7 +17,7 @@ class FournisseurAdmin(admin.ModelAdmin):
 
 @admin.register(Produit)
 class ProduitAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nom', 'categorie', 'fournisseur', 'quantite_stock', 'prix_unitaire')
+    list_display = ('id', 'nom', 'categorie', 'fournisseur', 'quantite_stock', 'prix_achat', 'prix_vente' )
     list_filter = ('categorie', 'fournisseur')
     search_fields = ('nom',)
 
@@ -33,5 +33,5 @@ class ClientAdmin(admin.ModelAdmin):
 
 @admin.register(MouvementStock)
 class MouvementStockAdmin(admin.ModelAdmin):
-    list_display = ('produit', 'type_mouvement', 'quantite', 'date_mouvement', 'client', 'fournisseur')
+    list_display = ('produit', 'type_mouvement', 'quantite', 'date_mouvement', 'client', 'gain', 'depense','revenu' , 'fournisseur')
     list_filter = ('type_mouvement', 'date_mouvement')

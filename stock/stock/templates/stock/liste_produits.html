@@ -9,7 +9,7 @@
 <ul>
     {% for p in produits %}
     <li>
-        {{ p.nom }} – {{ p.categorie.nom }} – {{ p.fournisseur.nom }} – {{ p.quantite_stock }} unités
+        {{ p.nom }} – {{ p.categorie.nom }} – {{ p.fournisseur.nom }} – {{ p.quantite_stock }} – prix achat : {{ p.prix_achat }} - prix vente : {{ p.prix_vente }}  unités
         <a href="{% url 'modifier_produit' p.id %}">✏️</a>
 
         <form action="{% url 'supprimer_produit' p.id %}" method="post" style="display:inline;">
@@ -23,3 +23,5 @@
 </ul>
 
 <a href="{% url 'dashboard' %}">🏠 Dashboard</a>
+
+    

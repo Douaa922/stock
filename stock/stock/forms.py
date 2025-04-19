@@ -5,7 +5,7 @@ from .models import Client, Fournisseur, Categorie, Produit , MouvementStock
 class MouvementStockForm(forms.ModelForm):
     class Meta:
         model = MouvementStock
-        fields = ['produit', 'type_mouvement', 'quantite', 'client', 'fournisseur']
+        fields = ['produit', 'type_mouvement', 'quantite', 'client']
 class ClientForm(forms.ModelForm):
     class Meta:
         model = Client
@@ -24,4 +24,4 @@ class CategorieForm(forms.ModelForm):
 class ProduitForm(forms.ModelForm):
     class Meta:
         model = Produit
-        fields = ['nom', 'description', 'quantite_stock', 'prix_unitaire', 'categorie', 'fournisseur']
+        fields = ['nom', 'description', 'quantite_stock', 'prix_achat', 'prix_vente' ,'categorie', 'fournisseur']

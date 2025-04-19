@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Caisse</h2>
+
+
+    <div class="row mb-3">
+
+        <div class="col-md-4">
+            <div class="card text-white bg-danger">
+                <div class="card-body">
+                    <h5 class="card-title">Revenus totaux :</h5>
+                    <p class="card-text"><strong>{{ revenus_totaux }} TND</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h5 class="card-title">Gains nets</h5>
+                    <p class="card-text"><strong>{{ total_gain }} TND</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-white bg-danger">
+                <div class="card-body">
+                    <h5 class="card-title">Total des Dépenses</h5>
+                    <p class="card-text"><strong>{{ total_depense }} TND</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h5 class="card-title">Solde</h5>
+                    <p class="card-text {% if solde >= 0 %}text-success{% else %}text-danger{% endif %}">
+                        <strong>{{ solde }} TND</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

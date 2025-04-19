@@ -84,7 +84,8 @@ class Produit(models.Model):
     nom = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     quantite_stock = models.IntegerField(default=0)
-    prix_unitaire = models.DecimalField(max_digits=10, decimal_places=2)
+    prix_achat = models.DecimalField(max_digits=10, decimal_places=2)
+    prix_vente = models.DecimalField(max_digits=10, decimal_places=2)
     categorie = models.ForeignKey(Categorie, on_delete=models.CASCADE)
     fournisseur = models.ForeignKey(Fournisseur, on_delete=models.CASCADE)
 
@@ -134,6 +135,10 @@ class MouvementStock(models.Model):
     client = models.ForeignKey('Client', on_delete=models.SET_NULL, null=True, blank=True)
     fournisseur = models.ForeignKey('Fournisseur', on_delete=models.SET_NULL, null=True, blank=True)
 
+    # Champs ajoutés pour le gain et la dépense
+    gain = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    depense = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    revenu = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     def clean(self):
         # Règles de validation intelligentes
         if self.type_mouvement == 'ENTREE' and not self.fournisseur:
@@ -142,7 +147,6 @@ class MouvementStock(models.Model):
             raise ValidationError("Une sortie doit être liée à un client.")
         if self.type_mouvement == 'SORTIE' and self.quantite > self.produit.quantite_stock:
             raise ValidationError("Stock insuffisant pour cette sortie.")
-
     def save(self, *args, **kwargs):
         self.clean()  # appeler clean() avant de sauver
 
@@ -150,11 +154,16 @@ class MouvementStock(models.Model):
         if self.pk is None:  # uniquement à la création
             if self.type_mouvement == 'ENTREE':
                 self.produit.quantite_stock += self.quantite
+                self.depense = self.produit.prix_achat * self.quantite  # Calcul de la dépense
+                self.gain = 0  # Pas de gain sur une entrée
+                self.revenu = 0  # Pas de revenu sur une entrée
             elif self.type_mouvement == 'SORTIE':
                 self.produit.quantite_stock -= self.quantite
+                self.depense = 0  # Pas de dépense pour une sortie
+                self.revenu = self.produit.prix_vente * self.quantite  # Revenu brut
+                if self.produit.prix_vente and self.produit.prix_achat:
+                    self.gain = (self.produit.prix_vente - self.produit.prix_achat) * self.quantite  # Gain net
+
             self.produit.save()
 
         super().save(*args, **kwargs)
-
-    def __str__(self):
-        return f"{self.type_mouvement} - {self.produit.nom} ({self.quantite})"

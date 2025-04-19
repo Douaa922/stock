@@ -32,7 +32,10 @@ urlpatterns = [
     path('mouvements/ajouter/', views.ajouter_mouvement, name='ajouter_mouvement'),
     path('mouvements/', views.liste_mouvements, name='liste_mouvements'),
 
+    path('caisse/', views.caisse_view, name='caisse'),
+
     path('dashboard/', views.dashboard_mouvements, name='dashboard'),
+
     path('register/', views.register_view, name='register'),
     path('login/', views.login_view, name='login'),
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),

@@ -251,7 +251,19 @@ def dashboard_mouvements(request):
     }
 
     return render(request, 'stock/dashboard.html', context)
+def caisse_view(request):
+    revenus_totaux = MouvementStock.objects.filter(type_mouvement='SORTIE').aggregate(Sum('revenu'))['revenu__sum'] or 0
+    total_gain = MouvementStock.objects.aggregate(Sum('gain'))['gain__sum'] or 0
+    total_depense = MouvementStock.objects.aggregate(Sum('depense'))['depense__sum'] or 0
+    solde = total_gain - total_depense
 
+    context = {
+        'revenus_totaux': revenus_totaux,  # Retirer l'espace après 'revenu'
+        'total_gain': total_gain,
+        'total_depense': total_depense,
+        'solde': solde,
+    }
+    return render(request, 'stock/caisse.html', context)
 
 def register_view(request):
     if request.method == 'POST':
@@ -274,3 +286,4 @@ def login_view(request):
     else:
         form = AuthenticationForm()
     return render(request, 'stock/login.html', {'form': form})
+
