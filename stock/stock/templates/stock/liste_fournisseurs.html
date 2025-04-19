@@ -1,0 +1,26 @@
+<h2>Liste des fournisseurs</h2>
+<a href="{% url 'ajouter_fournisseur' %}">➕ Nouveau fournisseur</a>
+
+<form method="get" style="margin: 10px 0;">
+    <input type="text" name="q" placeholder="🔍 Rechercher..." value="{{ query }}">
+    <button type="submit">Chercher</button>
+</form>
+
+<ul>
+    {% for f in fournisseurs %}
+    <li>
+        {{ f.nom }} – {{ f.telephone }}
+        <a href="{% url 'modifier_fournisseur' f.id %}">✏️</a>
+        <form action="{% url 'supprimer_fournisseur' f.id %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" onclick="return confirm('Supprimer {{ f.nom }} ?')">🗑️</button>
+        </form>
+    </li>
+    {% empty %}
+        <li>Rien à afficher</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'dashboard' %}">🏠 Dashboard</a>
+
+

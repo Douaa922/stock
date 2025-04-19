@@ -1,0 +1,25 @@
+<h2>Liste des produits</h2>
+<a href="{% url 'ajouter_produit' %}">➕ Nouveau produit</a>
+
+<form method="get" style="margin: 10px 0;">
+    <input type="text" name="q" placeholder="🔍 Rechercher..." value="{{ query }}">
+    <button type="submit">Chercher</button>
+</form>
+
+<ul>
+    {% for p in produits %}
+    <li>
+        {{ p.nom }} – {{ p.categorie.nom }} – {{ p.fournisseur.nom }} – {{ p.quantite_stock }} unités
+        <a href="{% url 'modifier_produit' p.id %}">✏️</a>
+
+        <form action="{% url 'supprimer_produit' p.id %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" onclick="return confirm('Supprimer {{ p.nom }} ?')">🗑️</button>
+        </form>
+    </li>
+    {% empty %}
+        <li>Rien à afficher</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'dashboard' %}">🏠 Dashboard</a>

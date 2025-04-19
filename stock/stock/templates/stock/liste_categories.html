@@ -1,0 +1,25 @@
+<h2>Liste des catégories</h2>
+<a href="{% url 'ajouter_categorie' %}">➕ Nouvelle catégorie</a>
+
+<form method="get" style="margin: 10px 0;">
+    <input type="text" name="q" placeholder="🔍 Rechercher..." value="{{ query }}">
+    <button type="submit">Chercher</button>
+</form>
+
+<ul>
+    {% for c in categories %}
+    <li>
+        {{ c.nom }}
+        <a href="{% url 'modifier_categorie' c.id %}">✏️</a>
+
+        <form action="{% url 'supprimer_categorie' c.id %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" onclick="return confirm('Supprimer {{ c.nom }} ?')">🗑️</button>
+        </form>
+    </li>
+    {% empty %}
+        <li>Rien à afficher</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'dashboard' %}">🏠 Dashboard</a>

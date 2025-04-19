@@ -1,0 +1,19 @@
+
+  <h2>Liste des mouvements de stock</h2>
+  <form method="get">
+    <input type="text" name="q" placeholder="Rechercher..." value="{{ query }}">
+    <button type="submit">Chercher</button>
+  </form>
+  <a href="{% url 'ajouter_mouvement' %}">Ajouter un mouvement</a>
+  <ul>
+    {% for m in mouvements %}
+      <li>
+        {{ m.date_mouvement|date:"Y-m-d H:i" }} :
+        {{ m.type_mouvement }} - {{ m.produit.nom }}
+        (Quantité : {{ m.quantite }})
+      </li>
+    {% empty %}
+      <li>Aucun mouvement trouvé.</li>
+    {% endfor %}
+  </ul>
+
