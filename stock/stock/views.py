@@ -7,7 +7,11 @@ from .forms import MouvementStockForm
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.shortcuts import render, redirect
+from django.db.models.functions import TruncDate
+from django.contrib.auth.decorators import login_required
 
+
+@login_required
 # ----------------- MOUVEMENTS DE STOCK -----------------
 def ajouter_mouvement(request):
     form = MouvementStockForm(request.POST or None)
@@ -15,7 +19,7 @@ def ajouter_mouvement(request):
         form.save()
         return redirect('liste_mouvements')
     return render(request, 'stock/ajouter_mouvement.html', {'form': form})
-
+@login_required
 def liste_mouvements(request):
     query = request.GET.get('q')
     if query:
@@ -29,6 +33,8 @@ def liste_mouvements(request):
         mouvements = MouvementStock.objects.all().order_by('-date_mouvement')
     return render(request, 'stock/liste_mouvements.html', {'mouvements': mouvements, 'query': query})
 
+
+@login_required
 # ----------------- PRODUITS -----------------
 def ajouter_produit(request):
     form = ProduitForm(request.POST or None)
@@ -36,7 +42,7 @@ def ajouter_produit(request):
         form.save()
         return redirect('liste_produits')
     return render(request, 'stock/ajouter_produit.html', {'form': form})
-
+@login_required
 def liste_produits(request):
     query = request.GET.get('q')
     if query:
@@ -49,7 +55,7 @@ def liste_produits(request):
     else:
         produits = Produit.objects.all()
     return render(request, 'stock/liste_produits.html', {'produits': produits, 'query': query})
-
+@login_required
 def modifier_produit(request, id):
     produit = get_object_or_404(Produit, id=id)
     form = ProduitForm(request.POST or None, instance=produit)
@@ -57,14 +63,14 @@ def modifier_produit(request, id):
         form.save()
         return redirect('liste_produits')
     return render(request, 'stock/modifier_produits.html', {'form': form})
-
+@login_required
 def supprimer_produit(request, id):
     produit = get_object_or_404(Produit, id=id)
     if request.method == 'POST':
         produit.delete()
         return redirect('liste_produits')
     return render(request, 'stock/supprimer_produit.html', {'produit': produit})
-
+@login_required
 # ----------------- CLIENTS -----------------
 def ajouter_client(request):
     form = ClientForm(request.POST or None)
@@ -72,7 +78,7 @@ def ajouter_client(request):
         form.save()
         return redirect('liste_clients')
     return render(request, 'stock/ajouter_client.html', {'form': form})
-
+@login_required
 def liste_clients(request):
     query = request.GET.get('q')
     if query:
@@ -84,7 +90,7 @@ def liste_clients(request):
     else:
         clients = Client.objects.all()
     return render(request, 'stock/liste_clients.html', {'clients': clients, 'query': query})
-
+@login_required
 def modifier_client(request, id):
     client = get_object_or_404(Client, id=id)
     form = ClientForm(request.POST or None, instance=client)
@@ -92,14 +98,14 @@ def modifier_client(request, id):
         form.save()
         return redirect('liste_clients')
     return render(request, 'stock/modifier_client.html', {'form': form})
-
+@login_required
 def supprimer_client(request, id):
     client = get_object_or_404(Client, id=id)
     if request.method == 'POST':
         client.delete()
         return redirect('liste_clients')
     return render(request, 'stock/supprimer_client.html', {'client': client})
-
+@login_required
 # ----------------- FOURNISSEURS -----------------
 def ajouter_fournisseur(request):
     form = FournisseurForm(request.POST or None)
@@ -107,7 +113,7 @@ def ajouter_fournisseur(request):
         form.save()
         return redirect('liste_fournisseurs')
     return render(request, 'stock/ajouter_fournisseur.html', {'form': form})
-
+@login_required
 def liste_fournisseurs(request):
     query = request.GET.get('q')
     if query:
@@ -121,7 +127,7 @@ def liste_fournisseurs(request):
     else:
         fournisseurs = Fournisseur.objects.all()
     return render(request, 'stock/liste_fournisseurs.html', {'fournisseurs': fournisseurs, 'query': query})
-
+@login_required
 def modifier_fournisseurs(request, id):
     fournisseur = get_object_or_404(Fournisseur, id=id)
     form = FournisseurForm(request.POST or None, instance=fournisseur)
@@ -129,14 +135,14 @@ def modifier_fournisseurs(request, id):
         form.save()
         return redirect('liste_fournisseurs')
     return render(request, 'stock/modifier_fournisseurs.html', {'form': form})
-
+@login_required
 def supprimer_fournisseurs(request, id):
     fournisseur = get_object_or_404(Fournisseur, id=id)
     if request.method == 'POST':
         fournisseur.delete()
         return redirect('liste_fournisseurs')
     return render(request, 'stock/supprimer_fournisseurs.html', {'fournisseur': fournisseur})
-
+@login_required
 # ----------------- CATÉGORIES -----------------
 def ajouter_categorie(request):
     form = CategorieForm(request.POST or None)
@@ -144,7 +150,7 @@ def ajouter_categorie(request):
         form.save()
         return redirect('liste_categories')
     return render(request, 'stock/ajouter_categorie.html', {'form': form})
-
+@login_required
 def liste_categories(request):
     query = request.GET.get('q')
     if query:
@@ -154,7 +160,7 @@ def liste_categories(request):
     else:
         categories = Categorie.objects.all()
     return render(request, 'stock/liste_categories.html', {'categories': categories, 'query': query})
-
+@login_required
 def modifier_categories(request, id):
     categorie = get_object_or_404(Categorie, id=id)
     form = CategorieForm(request.POST or None, instance=categorie)
@@ -162,7 +168,7 @@ def modifier_categories(request, id):
         form.save()
         return redirect('liste_categories')
     return render(request, 'stock/modifier_categories.html', {'form': form})
-
+@login_required
 def supprimer_categories(request, id):
     categorie = get_object_or_404(Categorie, id=id)
     if request.method == 'POST':
@@ -184,7 +190,7 @@ def supprimer_categories(request, id):
         'total_entrees': total_entrees,
         'total_sorties': total_sorties,
     })
-
+@login_required
 def dashboard_mouvements(request):
     total_mouvements = MouvementStock.objects.count()
     total_entrees = MouvementStock.objects.filter(type_mouvement='ENTREE').aggregate(Sum('quantite'))['quantite__sum'] or 0
@@ -200,14 +206,51 @@ def dashboard_mouvements(request):
         .order_by('-total_sortie')[:5]
     )
 
-    return render(request, 'stock/dashboard.html', {
+    # Données pour graphique camembert
+    total_entrees_chart = total_entrees
+    total_sorties_chart = total_sorties
+
+    # Données pour l'évolution dans le temps
+    mouvements_par_jour = (
+        MouvementStock.objects
+        .annotate(jour=TruncDate('date_mouvement'))
+        .values('jour', 'type_mouvement')
+        .annotate(total=Sum('quantite'))
+        .order_by('jour')
+    )
+
+    # Organiser les données
+    dates = sorted(set(m['jour'] for m in mouvements_par_jour))
+    entrees_par_jour = []
+    sorties_par_jour = []
+
+    for date in dates:
+        total_entree = sum(m['total'] for m in mouvements_par_jour if m['jour'] == date and m['type_mouvement'] == 'ENTREE')
+        total_sortie = sum(m['total'] for m in mouvements_par_jour if m['jour'] == date and m['type_mouvement'] == 'SORTIE')
+        entrees_par_jour.append(total_entree)
+        sorties_par_jour.append(total_sortie)
+
+    # Données pour le graphique produits les plus sortis
+    labels = [p['produit__nom'] for p in produits_plus_sortis]
+    data = [p['total_sortie'] for p in produits_plus_sortis]
+
+    # Context final
+    context = {
         'total_mouvements': total_mouvements,
         'total_entrees': total_entrees,
         'total_sorties': total_sorties,
         'derniers_mouvements': derniers_mouvements,
         'produits_plus_sortis': produits_plus_sortis,
-    })
+        'labels': labels,
+        'data': data,
+        'entree_sortie_labels': ['Entrées', 'Sorties'],
+        'entree_sortie_data': [total_entrees_chart, total_sorties_chart],
+        'dates': [d.strftime('%Y-%m-%d') for d in dates],
+        'entrees_data': entrees_par_jour,
+        'sorties_data': sorties_par_jour,
+    }
 
+    return render(request, 'stock/dashboard.html', context)
 
 
 def register_view(request):
